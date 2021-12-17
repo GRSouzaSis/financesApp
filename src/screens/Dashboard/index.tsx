@@ -109,8 +109,7 @@ const Dashboard: React.FC = () => {
           data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <TransactionCard data={item} />}          
-        />
-        
+        />        
       </Transactions>
     </Container>);
 }
