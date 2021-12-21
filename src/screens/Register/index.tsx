@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Yup from 'yup';
@@ -45,7 +45,7 @@ export default function Register(){
     name: 'Categoria'
   });  
 
-  const handleTransactionsTypesSelect = (type : 'up' | 'down') => {
+  const handleTransactionsTypesSelect = (type : 'positive' | 'negative') => {
     setTransactionType(type)
   }
   const handleOpenSelectCategoryModal = () => {
@@ -58,6 +58,7 @@ export default function Register(){
   const { 
     control,
     handleSubmit,
+    reset,
     formState: { errors }
    } = useForm({
     resolver: yupResolver(schema)
@@ -73,7 +74,7 @@ export default function Register(){
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
       date: new Date()
     }
@@ -88,26 +89,18 @@ export default function Register(){
       ]
 
       await AsyncStorage.setItem(dataKey,JSON.stringify(dataFormatted));
-      
+      reset();
       setTransactionType('')
       setCategory({
         key: 'category',
         name: 'Categoria'
       })
-      // navegation.navigate('Listagem');
+      navegation.navigate('Listagem');
     }catch(error){
       console.log(error);
       Alert.alert("Não foi possível salvar");
     }
   }
-
-  useEffect(()=> {
-    async function loadData(){
-     const data = await AsyncStorage.getItem(dataKey);
-     console.log(JSON.parse(data!));
-    }
-    loadData()
-  },[])
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -135,14 +128,14 @@ export default function Register(){
                 <TransactionTypeButton 
                   title="Entrada" 
                   type="up"
-                  onPress={()=> handleTransactionsTypesSelect('up')}
-                  isActive={transactionType === 'up'}
+                  onPress={()=> handleTransactionsTypesSelect('positive')}
+                  isActive={transactionType === 'positive'}
                 />
                 <TransactionTypeButton 
                   title="Saída" 
                   type="down"
-                  onPress={()=> handleTransactionsTypesSelect('down')}
-                  isActive={transactionType === 'down'}
+                  onPress={()=> handleTransactionsTypesSelect('negative')}
+                  isActive={transactionType === 'negative'}
                 />
               </TransactionsTypes>
               <SelectCategory

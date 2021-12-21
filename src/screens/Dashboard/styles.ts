@@ -82,3 +82,8 @@ export const TransactionList = styled.FlatList.attrs({
 `;
 
 export const Logoutbutton = styled(BorderlessButton)``;
+export const LoadContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
