@@ -22,14 +22,15 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
 import { useTheme } from 'styled-components';
-
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 export interface DataListProps {
   id: string;
   type: 'positive' | 'negative';
   name: string;
   amount: string;
   category: string;
-  date: string | Date;
+  date: string;
 }
 
 interface HighlightProps {
@@ -56,14 +57,17 @@ const Dashboard: React.FC = () => {
       .filter(transaction => transaction.type === type)
       .map(transaction => new Date(transaction.date).getTime())     
     )
-    return Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-    }).format(new Date(lastTransaction));
+   
+    // return format(+lastTransaction, 'dd, MMMM', {locale: ptBR})
+    // return Intl.DateTimeFormat('pt-BR', {
+    //   day: '2-digit',
+    //   month: 'long',
+    // }).format(new Date(lastTransaction));
   }
 
   async function loadData(){  
    const dataKey = '@finances:transactions';
+
    const response = await AsyncStorage.getItem(dataKey);
    const transactions = response ? JSON.parse(response) : [];
    let entriesTotal = 0;
@@ -71,30 +75,28 @@ const Dashboard: React.FC = () => {
 
    const transactionsFormatted: DataListProps[] = transactions
    .map((item: DataListProps) => {
-
       if(item.type === 'positive'){
         entriesTotal += Number(item.amount);
       }else{
         expensiveTotal += Number(item.amount);
       }
-
       const amount = Number(item.amount)
       .toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
       });   
-      const date = Intl.DateTimeFormat('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-      }).format(new Date(item.date));
+      // const date = Intl.DateTimeFormat('pt-BR', {
+      //   day: '2-digit',
+      //   month: '2-digit',
+      //   year: '2-digit'
+      // }).format(new Date(item.date));      
       return {
         id: item.id,
         name: item.name,
         amount,
         type: item.type,
         category: item.category,
-        date,
+        date: format(new Date(item.date), 'dd/MM/yy', {locale: ptBR}),
       }
     })
     setData(transactionsFormatted) 
