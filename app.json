@@ -1,5 +1,9 @@
 {
-  "expo": {
+  "expo": { 
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": ["js", "jsx", "ts", "tsx", "svg"]
+    },   
     "name": "finances",
     "slug": "finances",
     "version": "1.0.0",

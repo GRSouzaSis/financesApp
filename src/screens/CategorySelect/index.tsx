@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { FlatList } from "react-native";
 import { Button } from "../../components/Forms/Button";
-import { Input } from "../../components/Forms/Input";
-import { SelectCategory } from "../../components/Forms/SelectCategory";
-import { TransactionTypeButton } from "../../components/Forms/TransactionTypeButton";
 import { categories } from "../../Utils/categories";
-
 interface Category {
   key: string;
   name: string;
