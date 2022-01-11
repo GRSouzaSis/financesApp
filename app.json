@@ -1,15 +1,15 @@
 {
-  "expo": { 
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "ts", "tsx", "svg"]
-    },   
+  "name": "finances",
+  "displayName": "finances",
+  "expo": {
     "name": "finances",
     "slug": "finances",
+    "scheme": "finances",
     "version": "1.0.0",
+    "owner": "grsouza",
     "assetBundlePatterns": [
       "**/*"
     ]
-  },
-  "name": "finances"
+  }
+  
 }

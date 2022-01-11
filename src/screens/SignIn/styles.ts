@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   width: 100%;
-  height: ${RFPercentage(70)}px;
+  height: 70%;
 
   background-color: ${({theme})=> theme.colors.primary};
   justify-content: flex-end;
@@ -38,7 +38,7 @@ export const SignInTitle = styled.Text`
 
 export const Footer = styled.View`
   width: 100%;
-  height: ${RFPercentage(30)}px;
+  height: 30%;
   background-color: ${({theme})=> theme.colors.secondary};
 `;
 
