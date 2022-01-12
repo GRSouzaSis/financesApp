@@ -22,6 +22,7 @@ import { categories } from "../../Utils/categories";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useTheme } from 'styled-components'
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from '../../hooks/Auth';
 interface TransactionData {
   type: 'positive' | 'negative';
   name: string;
@@ -38,6 +39,7 @@ interface CategoryData {
 }
 
 export function Resume(){
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([])
@@ -51,7 +53,7 @@ export function Resume(){
   }
   async function loadData() {
     setIsLoading(true)
-    const dataKey = '@finances:transactions';
+    const dataKey = `@finances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 
