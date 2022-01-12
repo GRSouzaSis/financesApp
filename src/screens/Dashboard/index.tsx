@@ -24,6 +24,7 @@ import { ActivityIndicator } from 'react-native';
 import { useTheme } from 'styled-components';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAuth } from '../../hooks/Auth';
 export interface DataListProps {
   id: string;
   type: 'positive' | 'negative';
@@ -49,6 +50,7 @@ const Dashboard: React.FC = () => {
   const [data, setData] = useState<DataListProps[]>([])
   const [hightlightData, setHightlightData] = useState<HighlightData>({} as HighlightData)
   const theme = useTheme();
+  const { signOut } = useAuth();
 
   function getLastTransactionDate( collection : DataListProps[], type: 'positive' | 'negative'){
     
@@ -153,7 +155,7 @@ const Dashboard: React.FC = () => {
                     <UserName>Giva</UserName>
                   </User>
               </UserInfo>
-              <Logoutbutton onPress={()=>{}}>
+              <Logoutbutton onPress={signOut}>
                 <Icon name="power"/>
               </Logoutbutton>
             </UserWrapper>        

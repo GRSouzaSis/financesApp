@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +19,8 @@ interface AuthContextData{
   user: User;
   signInWithGoogle(): Promise<void>
   signInWithApple(): Promise<void>
+  signOut(): Promise<void>
+  userStorageLoading: boolean
 }
 
 interface AuthorizationResponse {
@@ -32,6 +34,9 @@ const AuthContext = createContext({}as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps){
   const [user, setUser] = useState<User>({} as User)
+  const [userStorageLoading, setUserStorageLoading] = useState(false)
+
+  const userStorageKay = '@finances:user'
 
   async function signInWithGoogle() {
     try{      
@@ -52,7 +57,7 @@ function AuthProvider({ children }: AuthProviderProps){
           photo: userInfo.picture
         }     
         setUser(userLogged)  
-        await AsyncStorage.setItem('@finances:user', JSON.stringify(userLogged));     
+        await AsyncStorage.setItem(userStorageKay, JSON.stringify(userLogged));     
       }else{
         console.log('falhou')
       }      
@@ -77,18 +82,39 @@ function AuthProvider({ children }: AuthProviderProps){
           photo: undefined
         } 
         setUser(userLogged)  
-        await AsyncStorage.setItem('@finances:user', JSON.stringify(userLogged));    
+        await AsyncStorage.setItem(userStorageKay, JSON.stringify(userLogged));    
       }
     }catch(error){
       throw new Error(error as string)
     }
   }
 
+  async function signOut(){
+    setUser({} as User);
+    await AsyncStorage.removeItem(userStorageKay);
+  }
+
+  useEffect(()=>{
+    setUserStorageLoading(true)
+    async function loadUserStorageDate(){
+      const userStorage = await AsyncStorage.getItem(userStorageKay)
+
+      if(userStorage){
+        const userLogged = JSON.parse(userStorage) as User;
+        setUser(userLogged);
+      }
+      setUserStorageLoading(false)
+    }
+    loadUserStorageDate();
+  },[])
+
   return(
     <AuthContext.Provider value={{ 
       user, 
       signInWithGoogle,
-      signInWithApple
+      signInWithApple,
+      signOut,
+      userStorageLoading
     }}>
       {children}
     </AuthContext.Provider>
