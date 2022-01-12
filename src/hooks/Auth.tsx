@@ -75,11 +75,12 @@ function AuthProvider({ children }: AuthProviderProps){
         ]
       });
       if(credential){
+        const photo = `https://ui-avatars.com/api/?name=${credential.fullName?.givenName}&lenght=2`
         const userLogged = {
           id: String(credential.user),
           email: credential.email!,
           name: credential.fullName!.givenName!,
-          photo: undefined
+          photo,
         } 
         setUser(userLogged)  
         await AsyncStorage.setItem(userStorageKay, JSON.stringify(userLogged));    

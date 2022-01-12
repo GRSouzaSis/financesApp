@@ -50,7 +50,7 @@ const Dashboard: React.FC = () => {
   const [data, setData] = useState<DataListProps[]>([])
   const [hightlightData, setHightlightData] = useState<HighlightData>({} as HighlightData)
   const theme = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   function getLastTransactionDate( collection : DataListProps[], type: 'positive' | 'negative'){
     
@@ -149,10 +149,10 @@ const Dashboard: React.FC = () => {
           <Header>
             <UserWrapper>
               <UserInfo>
-                <Photo source={{uri: 'https://avatars.githubusercontent.com/u/55997169?v=4'}}/>
+                <Photo source={{uri: user?.photo}}/>
                   <User>
                     <UserGreeting>Ola, </UserGreeting>
-                    <UserName>Giva</UserName>
+                    <UserName>{user.name}</UserName>
                   </User>
               </UserInfo>
               <Logoutbutton onPress={signOut}>
